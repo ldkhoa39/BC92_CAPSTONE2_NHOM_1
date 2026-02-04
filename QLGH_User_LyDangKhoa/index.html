@@ -79,11 +79,29 @@
         </div>
     </section>
 
+    <!-- Content: Danh sách sản phẩm + giỏ hàng -->
+    <!-- Loader -->
+    <div id="loader" class="loader-container">
+        <div class="spinner"></div>
+    </div>
 
-    <!-- Danh Sách Sản phẩm -->
+    
     <div class="container mt-5">
-        <h2 class="text-center mb-4">Danh Sách Sản Phẩm</h2>
         
+        <h2 class="text-center mb-4">Danh Sách Sản Phẩm</h2>
+
+        <!-- Fillter chọn loại sản phẩm -->
+        <div class="form-group">
+            <label>Chọn loại sản phẩm:</label>
+            <select id="loaiSP" class="form-control" onchange="filterProduct()">
+                <option value="all">Tất cả</option>
+                <option value="Samsung">Samsung</option>
+                <option value="Iphone">Iphone</option>
+            </select>
+        </div>
+        <!-- End Fillter chọn loại sản phẩm -->
+
+        <!-- Danh sách sản phẩm  -->
         <div class="table-responsive">
             <table class="table table-bordered table-hover align-middle">
                 <thead class="custom-table">
@@ -106,7 +124,12 @@
             </table>
         </div>
     </div>
-    <!-- End Danh Sách Sản phẩm -->
+    <!-- end Danh sách sản phẩm -->
+
+    <!-- Giỏ hàng -->
+    
+    <!-- End Giỏ hàng -->
+    <!-- Content: Danh sách sản phẩm + giỏ hàng -->
    
    
     <footer class="footerPhone">
