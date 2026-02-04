@@ -27,6 +27,16 @@
     <header>
         <nav class="phoneNav container navbar navbar-expand-lg">
             <a class="navbar-brand" href="#">CyberPhone</a>
+
+            <!-- Giỏ hàng -->
+            <div class="container text-right my-3">
+                <button class="btn" data-toggle="modal" data-target="#modalGioHang">
+                    <i class="fa fa-shopping-cart"></i> Giỏ hàng 
+                    <span id="cartCount" class="badge badge-danger">0</span>
+                </button>
+            </div>
+            <!-- end giỏ hàng -->
+
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#phoneNavbar"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon">
@@ -127,7 +137,39 @@
     <!-- end Danh sách sản phẩm -->
 
     <!-- Giỏ hàng -->
-    
+    <div class="modal fade" id="modalGioHang" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Giỏ Hàng Của Bạn</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Hình ảnh</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Giá</th>
+                                <th>Số lượng</th>
+                                <th>Tổng tiền</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblGioHang">
+                            </tbody>
+                    </table>
+                    <div class="text-right">
+                        <h4>Tổng tiền thanh toán: <span id="totalPrice" class="text-danger">0</span> VNĐ</h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" onclick="checkOut()">Thanh toán</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- End Giỏ hàng -->
     <!-- Content: Danh sách sản phẩm + giỏ hàng -->
    
