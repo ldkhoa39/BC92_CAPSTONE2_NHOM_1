@@ -1,8 +1,10 @@
 import Api from '../services/api.js';
 import Product from '../models/products.js';
+import Cart from '../models/cart.js';
+import CartItem from '../models/cart_Item.js';
 
 const api = new Api();
-
+const cart = new Cart();
 let productList = []; // Mảng chứa danh sách sản phẩm gốc từ Server
 
 // Tạo hàm async để lấy danh sách sản phẩm từ API
@@ -65,6 +67,136 @@ window.filterProduct = () => {
         });
     }
     renderUI(filteredList);
+};
+
+// Render giỏ hàng (Modal)
+const renderCart = (cartArray) => {
+    let content = "";
+
+    let totalAmount = 0; // biến tổng tiền
+
+    let totalQuantity = 0; // biến tổng số lượng
+
+    cartArray.forEach((item, index) => {
+        const { product, quantity } = item;
+        
+        // Tính toán
+        const subTotal = product.price * quantity;
+        totalAmount += subTotal;
+        totalQuantity += quantity;
+
+        content += `
+            <tr>
+                <td><img src="${product.img}" width="50" /></td>
+                <td>${product.name}</td>
+                <td>${parseInt(product.price).toLocaleString()}</td>
+                <td>
+                    <button class="btn btn-sm btn-info" onclick="changeQty('${product.id}', -1)">-</button>
+                    <span class="mx-2">${quantity}</span>
+                    <button class="btn btn-sm btn-info" onclick="changeQty('${product.id}', 1)">+</button>
+                </td>
+                <td>${subTotal.toLocaleString()}</td>
+                <td>
+                    <button class="btn btn-danger" onclick="removeCartItem('${product.id}')">Xóa</button>
+                </td>
+            </tr>
+        `;
+    });
+
+    // In vào bảng
+    const tblGioHang = document.getElementById("tblGioHang");
+    if (tblGioHang) tblGioHang.innerHTML = content;
+
+    // Cập nhật tổng tiền
+    const totalPriceElement = document.getElementById("totalPrice");
+    if (totalPriceElement) totalPriceElement.innerHTML = totalAmount.toLocaleString() + " VNĐ";
+
+    // Cập nhật số lượng trên icon
+    const cartCountElement = document.getElementById("cartCount");
+    if (cartCountElement) cartCountElement.innerHTML = totalQuantity;
+};
+
+// Thêm vào giỏ hàng
+window.addToCart = (productId) => {
+    const product = productList.find((item) => item.id === productId);
+    if (!product) return;
+
+    const index = cart.findIndex(product.id);
+
+    if (index === -1) {
+        const cartItem = new CartItem(product, 1);
+        cart.addProduct(cartItem);
+    } else {
+        cart.cartArray[index].quantity += 1;
+    }
+    
+    alert("Đã thêm vào giỏ hàng!");
+    renderCart(cart.cartArray);
+    setLocalStorage();
+};
+
+// Thay đổi số lượng (+/-)
+window.changeQty = (productId, num) => {
+    const index = cart.findIndex(productId);
+    if (index !== -1) {
+        const cartItem = cart.cartArray[index]; // Lấy đối tượng CartItem
+        const newQty = cartItem.quantity + num; // Tính số lượng mới
+
+        if (newQty > 0) {
+            cartItem.quantity = newQty;
+        } else {
+            if (confirm("Bạn có muốn xóa sản phẩm này khỏi giỏ hàng không?")) {
+                cart.removeProduct(index);
+            }
+        }
+        renderCart(cart.cartArray);
+        setLocalStorage();
+    }
+};
+
+// Xóa sản phẩm
+window.removeCartItem = (productId) => {
+    const index = cart.findIndex(productId);
+    if (index !== -1) {
+        if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?")) {
+            cart.removeProduct(index);
+            renderCart(cart.cartArray);
+            setLocalStorage();
+        }
+    }
+};
+
+// Thanh toán (Check out)
+window.checkOut = () => {
+    if (cart.cartArray.length === 0) {
+        alert("Giỏ hàng trống! Vui lòng thêm sản phẩm trước khi thanh toán.");
+        return;
+    }
+
+    const total = cart.cartArray.reduce((sum, item) => {
+        return sum + (item.product.price * item.quantity);
+    }, 0);
+
+    alert(`Cảm ơn bạn đã mua hàng! Tổng đơn hàng của bạn là: ${total.toLocaleString()} VNĐ`);
+
+    cart.cartArray = []; // Reset mảng
+    renderCart(cart.cartArray);
+    setLocalStorage();
+};
+
+// Tạo local storage để lưu giỏ hàng
+const setLocalStorage = () => {
+    const dataString = JSON.stringify(cart.cartArray);
+    localStorage.setItem("CART_LIST", dataString);
+};
+
+// Lấy giỏ hàng từ local storage
+const getLocalStorage = () => {
+    const dataString = localStorage.getItem("CART_LIST");
+    if (dataString) {
+        cart.cartArray = JSON.parse(dataString);
+        renderCart(cart.cartArray);
+    }
 };
 
 // Gọi API lấy danh sách sản phẩm
