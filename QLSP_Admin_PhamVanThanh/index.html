@@ -27,22 +27,13 @@
     <header>
         <nav class="phoneNav container navbar navbar-expand-lg">
             <a class="navbar-brand" href="#">CyberPhone</a>
-
-            <!-- Giỏ hàng -->
-            <div class="container text-right my-3">
-                <button class="btn" data-toggle="modal" data-target="#modalGioHang">
-                    <i class="fa fa-shopping-cart"></i> Giỏ hàng 
-                    <span id="cartCount" class="badge badge-danger">0</span>
-                </button>
-            </div>
-            <!-- end giỏ hàng -->
-
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#phoneNavbar"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon">
                     <i class="fa fa-bars"></i>
                 </span>
             </button>
+
 
             <div class="collapse navbar-collapse" id="phoneNavbar">
                 <ul class="navbar-nav ml-auto">
@@ -60,6 +51,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Carts (<span id="carts">0</span>)</a>
                     </li>
 
                 </ul>
@@ -89,93 +83,165 @@
         </div>
     </section>
 
-    <!-- Content: Danh sách sản phẩm + giỏ hàng -->
-    <!-- Loader -->
-    <div id="loader" class="loader-container">
-        <div class="spinner"></div>
-    </div>
+   <!-- section -->
 
-    
+    <!--  -->
     <div class="container mt-5">
-        
-        <h2 class="text-center mb-4">Danh Sách Sản Phẩm</h2>
+    <h2 class="text-center mb-4">Danh Sách Sản Phẩm</h2>
+    <div class="row">
+            <div class="col-md-8">
+              <!-- BEGIN BUTTOM THÊM MỚI -->
+              <button
+                id="btnThemSP"
+                class="btn btn-success"
+                data-toggle="modal"
+                data-target="#myModal"
+                onclick="openAddModal()"
+              >
+                <i class="fa fa-plus mr-1"></i>
+                Thêm Mới
+              </button>
+              <!-- END BUTTON THÊM MỚI -->
+               <!-- nút sắp xếp giảm dần -->
+                <button class="btn btn-warning" onclick="sortPriceDesc()">
+                    Giá cao → thấp
+                </button>
+                <!-- nút sắp xếp tăng dần -->
+                 <button class="btn btn-warning" onclick="sortPriceAsc()">
+                    Giá thấp → cao
+                </button>
 
-        <!-- Fillter chọn loại sản phẩm -->
-        <div class="form-group">
-            <label>Chọn loại sản phẩm:</label>
-            <select id="loaiSP" class="form-control" onchange="filterProduct()">
-                <option value="all">Tất cả</option>
-                <option value="Samsung">Samsung</option>
-                <option value="Iphone">Iphone</option>
-            </select>
-        </div>
-        <!-- End Fillter chọn loại sản phẩm -->
-
-        <!-- Danh sách sản phẩm  -->
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle">
-                <thead class="custom-table">
-                    <tr>
-                        <th>STT</th>
-                        <th>Mã SP</th>
-                        <th>Tên Sản Phẩm</th>
-                        <th>Giá</th>
-                        <th>Màn Hình</th>
-                        <th>Camera Trước</th>
-                        <th>Camera Sau</th>
-                        <th>Hình Ảnh</th>
-                        <th>Mô Tả</th>
-                        <th>Loại Máy</th>
-                        <th>Thao Tác</th>
-                    </tr>
-                </thead>
-                <tbody id="tblDanhSachSP">
-                    </tbody>
-            </table>
-        </div>
-    </div>
-    <!-- end Danh sách sản phẩm -->
-
-    <!-- Giỏ hàng -->
-    <div class="modal fade" id="modalGioHang" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Giỏ Hàng Của Bạn</h5>
-                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Hình ảnh</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Giá</th>
-                                    <th>Số lượng</th>
-                                    <th>Tổng tiền</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tblGioHang">
-                                </tbody>
-                        </table>
-                    </div>
-
-                    <div class="text-right mt-3">
-                        <h4>Tổng tiền thanh toán: <span id="totalPrice" class="text-danger">0</span> VNĐ</h4>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary" onclick="checkOut()">Thanh toán</button>
-                </div>
             </div>
-        </div>
+            <div class="col-md-4">
+              <!-- BEGIN TÌM KIẾM -->
+              <div class="input-group mb-3">
+                <input type="text"
+                  class="form-control"
+                  placeholder="Nhập từ khóa"
+                  aria-label="Recipient's username"
+                  aria-describedby="basic-addon2" 
+                  id="search" onkeyup="handleSearch()" />
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2"
+                    ><i class="fa fa-search"></i
+                  ></span>
+                </div>
+              </div>
+              <!-- END TÌM KIẾM -->
+            </div>
+          </div>
+    
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="custom-table">
+                <tr>
+                    <th>STT</th>
+                    <th>Mã SP</th>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Giá</th>
+                    <th>Màn Hình</th>
+                    <th>Camera Trước</th>
+                    <th>Camera Sau</th>
+                    <th>Hình Ảnh</th>
+                    <th>Mô Tả</th>
+                    <th>Loại Máy</th>
+                    <th>Thao Tác</th>
+                </tr>
+            </thead>
+            <tbody id="tblDanhSachSP">
+                </tbody>
+        </table>
     </div>
-    <!-- End Giỏ hàng -->
-    <!-- Content: Danh sách sản phẩm + giỏ hàng -->
-   
+</div>
+
+<!-- The Modal -->
+      <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            
+          <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Modal Heading</h4>
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Tên Sản Phẩm</label>
+                <input
+                  id="TenSP"
+                  class="form-control"
+                  placeholder="Nhập vào tên sản phẩm"
+                />
+              </div>
+              <div class="form-group">
+                <label>Giá</label>
+                <input
+                  id="GiaSP"
+                  class="form-control"
+                  placeholder="Nhập vào giá"
+                />
+              </div>
+              <div class="form-group">
+                <label>Màn hình</label>
+                <input
+                  id="ManHinhSP"
+                  class="form-control"
+                  placeholder="Nhập vào thông số"
+                />
+              </div>
+              <div class="form-group">
+                <label>Camera trước</label>
+                <input
+                  id="CamTruoc"
+                  class="form-control"
+                  placeholder="Nhập vào thông số"
+                />
+              </div>
+              <div class="form-group">
+                <label>Camera sau</label>
+                <input
+                  id="CamSau"
+                  class="form-control"
+                  placeholder="Nhập vào thông số"
+                />
+              </div>
+              <div class="form-group">
+                <label>Hình Ảnh</label>
+                <input
+                  id="HinhSP"
+                  class="form-control"
+                  placeholder="Nhập vào hình sản phẩm"
+                />
+              </div>
+              <div class="form-group">
+                <label for="">Mô tả: </label>
+                <textarea
+                  id="MoTa"
+                  class="form-control"
+                  cols="5"
+                  rows="10"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label>Loại máy</label>
+                <input
+                  id="LoaiMay"
+                  class="form-control"
+                  placeholder="Nhập vào loại máy"
+                />
+              </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--  -->   
    
     <footer class="footerPhone">
         <img class="img-fluid footer__light" src="./img/angle-up-light.svg" alt="">
