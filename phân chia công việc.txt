@@ -1,0 +1,2 @@
+Lý Đăng Khoa: User (quản lý giỏ hàng)
+Phạm Văn Thanh: Admin (quản lý sản phẩm)

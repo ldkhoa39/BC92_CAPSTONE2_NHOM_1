@@ -1,2 +1,1 @@
-# BC92_CAPSTONE2_NHOM_1
-Dự án capstone nhóm 1
+# BC92_CAPSTONE-2_V-Thanh
